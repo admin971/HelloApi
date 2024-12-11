@@ -43,20 +43,8 @@ pipeline {
             }
         }
 
-        stage('Clean Up') {
-            steps {
-                script {
-                    // Stop and remove containers
-                    sh 'docker-compose down'
-                }
-            }
-        }
+      
     }
 
-    post {
-        always {
-            // Ensure cleanup in case of failure
-            sh 'docker-compose down || true'
-        }
-    }
+   
 }
