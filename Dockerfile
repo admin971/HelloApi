@@ -12,7 +12,5 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 EXPOSE 5158
-EXPOSE 3307
-EXPOSE 3306
 ENTRYPOINT ["dotnet", "HelloApi.dll"]
 
