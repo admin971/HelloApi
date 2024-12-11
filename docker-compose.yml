@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dotnet-app
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mysql;Database=sampledb;User=appuser;Password=NewPassword;
+    ports:
+      - "5158:5158"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: NewPassword
+      MYSQL_DATABASE: sampledb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: NewPassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+
