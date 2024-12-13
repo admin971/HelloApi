@@ -1,0 +1,35 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  dockerRegistryServiceConnection: '<Docker-Registry-Service-Connection>'
+  imageRepository: 'helloapi'
+  dockerfilePath: 'Dockerfile'
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build and Push Docker Image
+  jobs:
+  - job: Build
+    displayName: Build and Push Docker Image
+    steps:
+    - task: Docker@2
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        tags: |
+          $(tag)
+- stage: Deploy
+  displayName: Deploy Application
+  jobs:
+  - job: Deploy
+    displayName: Deploy to Azure
+    steps:
+    - script: |
+        docker run -d -p 5158:5158 $(imageRepository):$(tag)
+      displayName: 'Run Docker Container'
